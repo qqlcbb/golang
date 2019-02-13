@@ -3,7 +3,7 @@ package engine
 type ConcurrentEngine struct{
 	Scheducler Scheducler
 	WorkCount int
-	ItemChan chan interface{}
+	ItemChan chan Item
 }
 
 type Scheducler interface {

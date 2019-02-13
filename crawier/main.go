@@ -8,10 +8,14 @@ import (
 )
 
 func main() {
+	itemChan, err := persist.ItemService("dating_profile")
+	if err != nil {
+		panic(err)
+	}
 	e := engine.ConcurrentEngine{
 		Scheducler: &scheduler.QueuedScheduler{},
 		WorkCount: 	100,
-		ItemChan: 	persist.ItemService(),
+		ItemChan: 	itemChan,
 	}
 
 	e.Run(engine.Request{

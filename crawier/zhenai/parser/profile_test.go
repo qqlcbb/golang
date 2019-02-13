@@ -2,6 +2,7 @@ package parser
 
 import (
 	"io/ioutil"
+	"test/crawier/engine"
 	"test/crawier/model"
 	"testing"
 )
@@ -13,25 +14,30 @@ func TestParseProfile(t *testing.T) {
 		panic(err)
 	}
 
-	result := ParseProfile(contents, "杨丽颖")
+	result := ParseProfile(contents, "http://album.zhenai.com/u/87617540","杨丽颖")
 
 	if len(result.Items) != 1 {
 		t.Errorf("Items should contain 1 element;but was %v", result.Items)
 	}
 
-	profile := result.Items[0].(model.Profile)
+	actual := result.Items[0]
 
-	expectProfield := model.Profile{
-		Name: "杨丽颖",
-		Marriger: "未婚",
-		Age: 25,
-		Xingzuo: "射手",
-		Height: "158",
-		Weight: "47",
-		Income: "3千以下",
+	expectProfield := engine.Item{
+		Url: "http://album.zhenai.com/u/87617540",
+		Type: "zhenai",
+		Id: "87617540",
+		Payload: model.Profile{
+			Name: "杨丽颖",
+			Marriger: "未婚",
+			Age: 25,
+			Xingzuo: "射手",
+			Height: "158",
+			Weight: "47",
+			Income: "3千以下",
+		},
 	}
 
-	if profile != expectProfield {
-		t.Errorf("expected %v;but was %v", expectProfield, profile)
+	if actual != expectProfield {
+		t.Errorf("expected %v;but was %v", expectProfield, actual)
 	}
 }
