@@ -63,7 +63,7 @@ func extractString(contents []byte, re *regexp.Regexp) string {
 
 func ProfileParse(name string) engine.ParseFunc {
 	return func(c []byte, url string) engine.ParseResult {
-		return ParseProfile(c, name, url)
+		return ParseProfile(c, url, name)
 	}
 }
 
