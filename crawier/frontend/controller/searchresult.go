@@ -5,6 +5,7 @@ import (
 	"github.com/olivere/elastic"
 	"net/http"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 	"test/crawier/engine"
@@ -48,9 +49,10 @@ func (h SearchResultHandle) ServeHTTP(w http.ResponseWriter, req *http.Request) 
 
 func (h SearchResultHandle) getSearchResult(q string, from int) (model.SearchResult, error) {
 	var result model.SearchResult
+	result.Query = q
 	resp, err := h.Client.
 		Search("dating_profile").
-		Query(elastic.NewQueryStringQuery(q)).
+		Query(elastic.NewQueryStringQuery(rewriteQueryString(q))).
 		From(from).
 		Do(context.Background())
 	if err != nil {
@@ -58,7 +60,15 @@ func (h SearchResultHandle) getSearchResult(q string, from int) (model.SearchRes
 	}
 	result.Hits = resp.TotalHits()
 	result.Start = from
-
 	result.Items = resp.Each(reflect.TypeOf(engine.Item{}))
+
+	result.PrevFrom = result.Start - len(result.Items)
+	result.NextFrom = result.Start + len(result.Items)
+
 	return result, nil
+}
+
+func rewriteQueryString(q string) string {
+	re := regexp.MustCompile(`([A-Z][a-z]*):`)
+	return re.ReplaceAllString(q, "Payload.$1:")
 }
