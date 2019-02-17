@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"test/errhanding/fib"
+	"test/lang/errhandingnding/fib"
 )
 
 func tryDefer() {

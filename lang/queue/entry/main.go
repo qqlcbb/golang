@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"test/queue"
+	"test/lang/queue"
 )
 
 func main() {

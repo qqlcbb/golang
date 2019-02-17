@@ -34,7 +34,7 @@ func TestSave(t *testing.T) {
 	}
 
 	// save item
-	err = save(client, "dating_test", expect)
+	err = Save(client, "dating_test", expect)
 	if err != nil {
 		panic(err)
 	}

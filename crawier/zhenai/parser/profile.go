@@ -23,7 +23,7 @@ var incomeRe = regexp.MustCompile(`<div class="m-btn purple" data-v-bff6f798>月
 
 var idUrlRe = regexp.MustCompile(`http://album.zhenai.com/u/([\d]+)`)
 
-func ParseProfile(contents []byte, url string, name string) engine.ParseResult {
+func parseProfile(contents []byte, url string, name string) engine.ParseResult {
 	profile := model.Profile{}
 	// 年龄
 	age, _ := strconv.Atoi(extractString(contents, ageRe))
@@ -61,9 +61,21 @@ func extractString(contents []byte, re *regexp.Regexp) string {
 	return ""
 }
 
-func ProfileParse(name string) engine.ParseFunc {
-	return func(c []byte, url string) engine.ParseResult {
-		return ParseProfile(c, url, name)
+type ProfileParser struct {
+	userName string
+}
+
+func (p *ProfileParser) Parse(contents []byte, url string) engine.ParseResult {
+	return parseProfile(contents, url, p.userName)
+}
+
+func (p *ProfileParser) Serialize() (name string, args interface{}) {
+	return "ProfileParser", p.userName
+}
+
+func NewProfileParser(name string) *ProfileParser {
+	return &ProfileParser{
+		userName: name,
 	}
 }
 

@@ -1,14 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"test/crawier/engine"
-	"test/crawier/persist"
 	"test/crawier/scheduler"
 	"test/crawier/zhenai/parser"
+	"test/crawier_distributed/config"
+	"test/crawier_distributed/persist/client"
 )
 
 func main() {
-	itemChan, err := persist.ItemService("dating_profile")
+	itemChan, err := client.ItemSaver(fmt.Sprintf(":%d", config.ItemSaverPort))
+
 	if err != nil {
 		panic(err)
 	}
@@ -20,12 +23,6 @@ func main() {
 
 	e.Run(engine.Request{
 		Url: "http://www.zhenai.com/zhenghun",
-		Parser: engine.NewFuncParser(parser.ParseCityList, "ParseCityList"),
+		ParserFunc: parser.ParseCityList,
 	})
-
-	// e.Run(engine.Request{
-	// 	Url: "http://www.zhenai.com/zhenghun/shanghai",
-	// 	ParserFunc: parser.ParseCity,
-	// })
 }
-

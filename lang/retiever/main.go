@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"test/retiever/mock"
-	"test/retiever/real"
+	"test/lang/retieveriever/mock"
+	"test/lang/retieveriever/real"
 	"time"
 )
 

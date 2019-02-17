@@ -13,10 +13,11 @@ var cityUrlRe = regexp.MustCompile(`(http://www.zhenai.com/zhenghun/shanghai/[^"
 func ParseCity(contents []byte, _ string) engine.ParseResult {
 	result := engine.ParseResult{}
 	matches := profileRe.FindAllSubmatch(contents, -1)
+
 	for _, val := range matches {
 		result.Requests = append(result.Requests, engine.Request{
 			Url: 		string(val[1]),
-			ParserFunc: ProfileParse(string(val[2])),
+			Parser: 	NewProfileParser(string(val[2])),
 		})
 	}
 
@@ -24,7 +25,7 @@ func ParseCity(contents []byte, _ string) engine.ParseResult {
 	for _, val := range matches {
 		result.Requests = append(result.Requests, engine.Request{
 			Url: 		string(val[1]),
-			ParserFunc: ParseCity,
+			Parser: 	engine.NewFuncParser(ParseCity, "ParseCity"),
 		})
 	}
 

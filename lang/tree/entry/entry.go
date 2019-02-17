@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"test/tree"
+	"test/lang/tree/tree"
 )
 
 type myTreeNode struct {
