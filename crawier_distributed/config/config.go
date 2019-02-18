@@ -6,10 +6,9 @@ const (
 	ParserCityList = "ParserCityList"
 	NilParser = "NilParser"
 
-	ItemSaverPort = 1234
-	WorkerPort0 = 9001
-
 	ElasticIndex = "dating_proflie"
 	ItemSaverRpc = "ItemSaverService.Save"
 	CrawlServiceRpc = "CrawlService.Process"
+
+	Qps = 20
 )

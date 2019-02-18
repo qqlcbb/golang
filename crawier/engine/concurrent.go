@@ -1,5 +1,7 @@
 package engine
 
+import "log"
+
 type ConcurrentEngine struct{
 	Scheducler Scheducler
 	WorkCount int
@@ -43,6 +45,7 @@ func (e *ConcurrentEngine) Run(sends ...Request) {
 		result := <- out
 		for _, item := range result.Items {
 			go func() {
+				log.Printf("get Item: %v", item)
 				e.ItemChan <- item
 			} ()
 		}

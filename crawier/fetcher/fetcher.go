@@ -4,7 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"test/crawier_distributed/config"
 	"time"
 
 	"golang.org/x/net/html/charset"
@@ -13,11 +15,12 @@ import (
 	"golang.org/x/text/transform"
 )
 
-var timeLimit = time.Tick(100 * time.Millisecond)
+var timeLimit = time.Tick(time.Second / config.Qps)
 
 func Fetch(url string) ([]byte, error) {
 	// resp, err := http.Get(url)
 	<-timeLimit
+	log.Printf("Fetching Url %s", url)
 	// 自定义请求
 	request, err := http.NewRequest(http.MethodGet,url, nil)
 	request.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36")
