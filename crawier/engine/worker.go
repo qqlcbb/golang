@@ -5,7 +5,7 @@ import (
 	"test/crawier/fetcher"
 )
 
-func worker(r Request) (ParseResult, error) {
+func Worker(r Request) (ParseResult, error) {
 	// log.Printf("Fetching Url %s", r.Url)
 	// 获取url内容
 	body, err := fetcher.Fetch(r.Url)

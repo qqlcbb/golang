@@ -13,13 +13,11 @@ func TestItemSaver(t *testing.T) {
 	// start ItemSaverServer
 	go ServerRpc(host, "test1")
 	time.Sleep(time.Second)
-
 	// start SaverClient
 	client , err := rpcsupport.NewClient(host)
 	if err != nil {
 		panic(err)
 	}
-
 	// Call save
 	item := engine.Item{
 		Url: "http://album.zhenai.com/u/87617540",
@@ -35,6 +33,7 @@ func TestItemSaver(t *testing.T) {
 			Income: "3千以下",
 		},
 	}
+
 
 	var result string
 	err = client.Call("ItemSaverService.Save", item, &result)

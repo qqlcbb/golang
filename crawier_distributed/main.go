@@ -6,23 +6,31 @@ import (
 	"test/crawier/scheduler"
 	"test/crawier/zhenai/parser"
 	"test/crawier_distributed/config"
-	"test/crawier_distributed/persist/client"
+	itemsaver "test/crawier_distributed/persist/client"
+	worker "test/crawier_distributed/worker/client"
 )
 
 func main() {
-	itemChan, err := client.ItemSaver(fmt.Sprintf(":%d", config.ItemSaverPort))
+	itemChan, err := itemsaver.ItemSaver(fmt.Sprintf(":%d", config.ItemSaverPort))
 
 	if err != nil {
 		panic(err)
 	}
+
+	processor, err := worker.CreateProcessor()
+	if err != nil {
+		panic(err)
+	}
+
 	e := engine.ConcurrentEngine{
 		Scheducler: &scheduler.QueuedScheduler{},
 		WorkCount: 	100,
 		ItemChan: 	itemChan,
+		RequestProcessor: processor,
 	}
 
 	e.Run(engine.Request{
 		Url: "http://www.zhenai.com/zhenghun",
-		ParserFunc: parser.ParseCityList,
+		Parser: engine.NewFuncParser(parser.ParseCityList, config.ParserCityList),
 	})
 }

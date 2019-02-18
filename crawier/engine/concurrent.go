@@ -4,7 +4,10 @@ type ConcurrentEngine struct{
 	Scheducler Scheducler
 	WorkCount int
 	ItemChan chan Item
+	RequestProcessor Processor
 }
+
+type Processor func(r Request) (ParseResult, error)
 
 type Scheducler interface {
 	ReadyNotifier
@@ -28,7 +31,7 @@ func (e *ConcurrentEngine) Run(sends ...Request) {
 	// 创建10个worker
 	for i := 0; i < e.WorkCount; i ++ {
 		// 将worker放进worker队列
-		createWorker(e.Scheducler.WorkChan(), out, e.Scheducler)
+		e.createWorker(e.Scheducler.WorkChan(), out, e.Scheducler)
 	}
 
 	for _, r := range sends {
@@ -55,13 +58,13 @@ func (e *ConcurrentEngine) Run(sends ...Request) {
 	}
 }
 
-func createWorker(in chan Request, out chan ParseResult, ready ReadyNotifier) {
+func (e *ConcurrentEngine) createWorker(in chan Request, out chan ParseResult, ready ReadyNotifier) {
 	go func() {
 		for {
 			// tell scheduler i m ready
 			ready.WorkerReady(in)
 			request := <- in
-			result, err := worker(request)
+			result, err := e.RequestProcessor(request)
 			if err != nil {
 				continue
 			}

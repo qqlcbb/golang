@@ -16,6 +16,7 @@ func main() {
 		Scheducler: &scheduler.QueuedScheduler{},
 		WorkCount: 	100,
 		ItemChan: 	itemChan,
+		RequestProcessor: engine.Worker,
 	}
 
 	e.Run(engine.Request{

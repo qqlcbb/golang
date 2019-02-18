@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"test/crawier/engine"
 	"test/crawier/model"
+	"test/crawier_distributed/config"
 )
 // 名字
 var nameRe = regexp.MustCompile(`<h1 class="nickName" data-v-5b109fc3>([^<]+)</h1>`)
@@ -70,7 +71,7 @@ func (p *ProfileParser) Parse(contents []byte, url string) engine.ParseResult {
 }
 
 func (p *ProfileParser) Serialize() (name string, args interface{}) {
-	return "ProfileParser", p.userName
+	return config.ParserProfile, p.userName
 }
 
 func NewProfileParser(name string) *ProfileParser {
